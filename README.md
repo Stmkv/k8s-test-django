@@ -107,3 +107,42 @@ echo test | base64
 ```yaml
 echo dGVzdAo= | base64 -d
 ```
+
+### Запуск postgres через helm
+
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+```
+
+```
+helm install pg-django bitnami/postgresql
+--version <VERSION>
+--set auth.postgresPassword=<YOUR_ROOT_PASSWORD>
+--set auth.password=<YOUR_PASSWORD>
+--set auth.username=<YOUR_USERNAME>
+--set auth.database=<YOUR_DATABASE>
+```
+
+Потом узнаем адрес хоста, чтобы добавить его в секреты
+
+```
+kubectl get svc | grep pg-django
+```
+
+Дальее добавляем доменное имя к адресу `minicube ip`
+
+`sudo nano /etc/host`
+
+```
+192.168.59.104  star-burger.test
+```
+
+Выполняем комманду
+
+```
+kubectl apply -f <Название файла>
+
+```
+
+Чтобы прмиенить миграции запустите файл `django-migrations.yml`
