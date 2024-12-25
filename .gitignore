@@ -2,3 +2,5 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.env
+minikube/django-secret.yml
