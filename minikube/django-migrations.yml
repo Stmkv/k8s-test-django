@@ -4,7 +4,7 @@ metadata:
   name: django-migrate-job
 spec:
   backoffLimit: 2
-  activeDeadlineSeconds: 60
+  activeDeadlineSeconds: 600
   template:
     metadata:
       labels:
@@ -13,8 +13,29 @@ spec:
       containers:
         - name: django
           image: stmkv03/django:v1.0
-          envFrom:
-            - secretRef:
-                name: django-secret
-          command: ['./manage.py', 'migrate', '--noinput']
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: DATABASE_URL
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: SECRET_KEY
+            - name: DEBUG
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: DEBUG
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: ALLOWED_HOSTS
+          command:
+            - /bin/bash
+            - -c
+            - python manage.py migrate --noinput
       restartPolicy: Never
