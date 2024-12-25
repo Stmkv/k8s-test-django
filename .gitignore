@@ -4,3 +4,6 @@ __pycache__/
 *$py.class
 .env
 minikube/django-secret.yml
+minikube/postgres-deployment.yml
+minikube/postgres-secret.yml
+minikube/postgres-service.yml
